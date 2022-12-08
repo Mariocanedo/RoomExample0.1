@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [TaskEntity:: class], version = 1)
+@Database(entities = [TaskEntity:: class], version = 2)
 
 // CLASE ABSTRACTA HEREDA DE ROOM
 abstract  class TaskDataBase  : RoomDatabase() {
@@ -46,7 +46,7 @@ abstract  class TaskDataBase  : RoomDatabase() {
                     context.applicationContext,
                     // NOMBRE DEL ARCHIVO QUE CONTIENE LA BASE DE DATO
                     TaskDataBase::class.java,
-                    "Task_db"
+                    "TaskEntity"
                 )
                     .build()
                 INSTANCE = instance

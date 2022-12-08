@@ -13,5 +13,8 @@ data class TaskEntity(
     val id: Int = 0,
     val title: String,
     val descripcion: String,
-    val author: String
+    val date : String,
+    val priority : Int,
+    val state : Boolean
+
 )

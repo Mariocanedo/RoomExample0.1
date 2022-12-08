@@ -9,6 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
+import com.example.roomexample01.Model.TaskDataBase
 import com.example.roomexample01.Model.TaskEntity
 import com.example.roomexample01.ViewModel.TaskViewModel
 import com.example.roomexample01.databinding.FragmentFirstBinding
@@ -37,49 +41,29 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+     // referencia Adapter
+        val adapter = TaskAdapter()
+        binding.rvTask.adapter= adapter
+        binding.rvTask.layoutManager = LinearLayoutManager(context)
+        binding.rvTask.addItemDecoration(DividerItemDecoration(context,DividerItemDecoration.VERTICAL))
 
 
         // recorrer la base de datos
         viewModel.allTask.observe(viewLifecycleOwner, Observer {
 
             it?.let {
-                 binding.tvt.text=it.toString()            }
+               adapter.update(it)         }
 
         })
 
-        val taskExample = TaskEntity(title = "Ejemplo Otro",
-            descripcion = "Descripcion",
-            author = "MarioC")
-          viewModel.insertTask(taskExample)
-        Log.d("Database",viewModel.allTask.toString())
+        val newTask = TaskEntity( title = "BD",
+            descripcion = "Base Prueba",
+            date = "07/12/2022",
+            priority = 2,
+            state = true)
+        viewModel.insertTask(newTask)
 
+  binding.fab2.setOnClickListener{
+      findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
 
-
-
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
-
-
-
-     /*   val instance = Room.databaseBuilder(
-            // la bade datos sea una para toda la app
-            requireContext().applicationContext,
-            TaskDataBase::class.java,
-            "Task_db")
-            // agregro esto para que el error se valla lo agrega al hilo principal
-           .allowMainThreadQueries()
-            .build()
-
-        var taskExample = TaskEntity(title = "Ejemplo Titulo",
-            descripcion = "Descripcion",
-            author = "Cristian")
-         instance.getTaskDao().insertTask(taskExample)
-        Log.d("Database",instance.getTaskDao().getAllTask().toString())*/
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding.root
-    }
-}
+}}}

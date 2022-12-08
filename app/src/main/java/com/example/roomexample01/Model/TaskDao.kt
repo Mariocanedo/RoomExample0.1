@@ -12,7 +12,7 @@ interface TaskDao {
     //inserta una tarea OBJETO DEL LA ENTIDAD  , ESTRATEGIA DE CONFLICTO REPETICIÓN EJ ID
     @Insert(onConflict = OnConflictStrategy.REPLACE)
 
-    suspend fun insertTask(task: TaskEntity)
+    suspend infix fun insertTask(task: TaskEntity)
 
     //inserta listado de tareas
     @Insert(onConflict = OnConflictStrategy.REPLACE)
