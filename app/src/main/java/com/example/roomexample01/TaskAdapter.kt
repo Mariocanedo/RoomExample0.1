@@ -15,14 +15,15 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskVH>() {
     private var mlistTaskEntity = listOf<TaskEntity>()
 
     // seleccionar un elemento
-   // variable encargada de obtener los datos, ya sea de internet, caché o base de datos.
-   // errorMessageLiveData = MutableLiveData<String>().
-   // Se trata de un LiveData que informará a la vista cuando haya un error al obtener los datos del repositorio
+    // variable encargada de obtener los datos, ya sea de internet, caché o base de datos.
+    // errorMessageLiveData = MutableLiveData<String>().
+    // Se trata de un LiveData que informará a la vista cuando haya un error al obtener los datos del repositorio
     private val selectedTaskEntity = MutableLiveData<TaskEntity>()
 
+    // devuele el elemento
     fun selectedItem(): LiveData<TaskEntity> = selectedTaskEntity
 
-
+    // RECIBE UN LISTADO DE TAREAS
     fun update(listTaskEntity: List<TaskEntity>) {
         mlistTaskEntity = listTaskEntity
         notifyDataSetChanged()
@@ -30,8 +31,10 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskVH>() {
 
 
     // SE COMUNICA CON EL XML QUE TENDRA LA VISTA DEL RECYCLERVIEW
+    // puedo tener acceso dentro de la clase
     inner class TaskVH(private val binding: TaskItemBinding) :
         RecyclerView.ViewHolder(binding.root),
+        // implemento el Clik
         View.OnClickListener {
 
         fun bind(task: TaskEntity) {
@@ -40,11 +43,15 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskVH>() {
             binding.tvDescription.text = task.descripcion
             binding.tvDate.text = task.date
             binding.cbState.isChecked = task.state
+            binding.tvPrioridad.text= task.priority.toString()
+            // Activar el elemento click dentro de la vista
+            itemView.setOnClickListener(this)
 
 
         }
 
-        override fun onClick(p0: View?) {
+        override fun onClick(v: View?) {
+            // no tiene un select
             selectedTaskEntity.value = mlistTaskEntity[adapterPosition]
 
 
@@ -56,11 +63,13 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskVH>() {
         return TaskVH(TaskItemBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
+    // Entrega una posicion y une con el objeto por posicion
     override fun onBindViewHolder(holder: TaskVH, position: Int) {
         val taskEntity = mlistTaskEntity[position]
         holder.bind(taskEntity)
     }
 
+    // Muestra total de los elementos
     override fun getItemCount(): Int = mlistTaskEntity.size
 
 }

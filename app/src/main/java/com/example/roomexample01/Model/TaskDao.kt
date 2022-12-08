@@ -11,7 +11,6 @@ interface TaskDao {
 
     //inserta una tarea OBJETO DEL LA ENTIDAD  , ESTRATEGIA DE CONFLICTO REPETICIÓN EJ ID
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-
     suspend infix fun insertTask(task: TaskEntity)
 
     //inserta listado de tareas
@@ -45,6 +44,10 @@ interface TaskDao {
     // traer una tarea por Id
     @Query("SELECT * FROM TASK_TABLE WHERE id =:id")
     fun getTaskByID(id:Int): LiveData<TaskEntity>
+
+
+
+
 
 
 

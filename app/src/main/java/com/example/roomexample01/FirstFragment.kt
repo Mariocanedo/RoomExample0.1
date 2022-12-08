@@ -11,9 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
-import com.example.roomexample01.Model.TaskDataBase
-import com.example.roomexample01.Model.TaskEntity
 import com.example.roomexample01.ViewModel.TaskViewModel
 import com.example.roomexample01.databinding.FragmentFirstBinding
 
@@ -22,9 +19,11 @@ import com.example.roomexample01.databinding.FragmentFirstBinding
  */
 class FirstFragment : Fragment() {
 
-    private lateinit var _binding : FragmentFirstBinding
+    private lateinit var _binding: FragmentFirstBinding
+
     // agregar View Model
-     private val viewModel: TaskViewModel by activityViewModels()
+    private val viewModel: TaskViewModel by activityViewModels()
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -41,29 +40,56 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-     // referencia Adapter
+
+
+
+        // referencia Adapter
         val adapter = TaskAdapter()
-        binding.rvTask.adapter= adapter
+        binding.rvTask.adapter = adapter
         binding.rvTask.layoutManager = LinearLayoutManager(context)
-        binding.rvTask.addItemDecoration(DividerItemDecoration(context,DividerItemDecoration.VERTICAL))
+        // añade un linea
+        binding.rvTask.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
 
-        // recorrer la base de datos
+        // recorrer la base de datos Y OBSERVA SI HAY CAMBIOS
         viewModel.allTask.observe(viewLifecycleOwner, Observer {
-
+            // hacemos update para actualizar nuestro adaptador
             it?.let {
-               adapter.update(it)         }
+                adapter.update(it)
+            }
 
         })
 
-        val newTask = TaskEntity( title = "BD",
+        /*   val newTask = TaskEntity( title = "BD",
             descripcion = "Base Prueba",
             date = "07/12/2022",
             priority = 2,
             state = true)
-        viewModel.insertTask(newTask)
+        viewModel.insertTask(newTask)*/
 
-  binding.fab2.setOnClickListener{
-      findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        binding.fab2.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
+        adapter.selectedItem().observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Log.d("ITEM SELECTED", it.title)
+                // LLLAMAMO AL METODO SELECTED Y LE ENTREGAMOS EL OBJETO
+                viewModel.selected(it)
+                findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            }
+        })
+    }
 
-}}}
+
+
+
+
+
+}
+
+

@@ -1,4 +1,4 @@
-package com.example.roomexample01
+package com.example.roomexample01.Model
 
 import androidx.lifecycle.LiveData
 import com.example.roomexample01.Model.TaskDao
@@ -13,12 +13,20 @@ class TaskRepository ( private  val taskDao: TaskDao){
     val listAllTask : LiveData<List<TaskEntity>> = taskDao.getAllTask()
 
    suspend fun insertTask( task: TaskEntity){
-
         taskDao.insertTask(task)
+    }
+
+
+    // fucion que actualiza
+    suspend fun updateTask(task: TaskEntity){
+        taskDao.updateTask(task)
+
     }
    suspend fun deleteTask(task: TaskEntity){
         taskDao.deleteTask(task)
     }
+
+
 
 
 }
